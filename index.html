@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="stylesheet" href="css/reset.min.css">
+    <link rel="stylesheet" href="css/swiper.min.css">
+    <link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+<!--
+    涉及到的知识点：
+    流式布局 百分比布局
+    rem
+    flexbox
+    swiper
+    ejs 动态绑定数据
+    iscroll.js
+    雪碧图
+    ajax 跨域请求 jsonp
+-->
+<!--header begin-->
+<header>
+    <h1 class="i-logo">
+        <a href="#">
+            <img src="images/logo.png" alt="">
+        </a>
+    </h1>
+</header>
+<!--header end-->
+
+<!--nav begin-->
+<nav>
+    <a href="#" class="i-link cur">头条</a>
+    <a href="#" class="i-link">视频</a>
+    <a href="#" class="i-link">财经</a>
+    <a href="#" class="i-link">凤凰号</a>
+    <a href="#" class="i-link">凤凰卫视</a>
+</nav>
+<!--nav end-->
+
+<!--focus begin-->
+<div class="focus">
+    <div class="swiper-container">
+        <!--焦点图片-->
+        <div class="swiper-wrapper">
+            <!--<div class="swiper-slide">
+                <a href="#">
+                    <img src="images/banner01.png" alt="">
+                    <span class="txt">标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题</span>
+                    <span class="bg"></span>
+                </a>
+            </div>-->
+        </div>
+        <!--分页器-->
+        <div class="swiper-pagination"></div>
+    </div>
+</div>
+<!--focus end-->
+
+<div class="main">
+
+</div>
+
+
+
+<!--//第一步引入-->
+<script src="js/ejs.min.js"></script>
+<script src="js/zepto.min.js"></script>
+<script src="js/swiper.min.js"></script>
+    <!--//第三步，造焦点图模板-->
+<script type="text/template" id="focusTemplate">
+    <%$.each(focusTemData,function(index,item){%>
+    <div class="swiper-slide">
+        <a href="<%=item.link.weburl%>">
+            <img src="<%=item.thumbnail%>" alt="">
+            <span class="txt"><%=item.title%></span>
+            <span class="bg"></span>
+        </a>
+    </div>
+    <%})%>
+</script>
+<!--造中间部分模板-->
+<script charset="utf-8" type="text/template" id="itemTemplate">
+    <%$.each(itemTemData,function(index,item){%>
+    <%if (item.style.images){%>
+    <section class="itemPics">
+        <div class="i-title"><a href="<%=item.link.weburl%>"><%=item.title%></a></div>
+        <div class="pics">
+            <a href="<%=item.link.weburl%>">
+                <img src="<%=item.style.images[0]%>" alt="">
+                <img src="<%=item.style.images[1]%>" alt="">
+                <img src="<%=item.style.images[2]%>" alt="">
+            </a>
+        </div>
+        <div class="i-des">
+            <div class="i-info">
+                <div class="i-source"><%=item.source%></div>
+                <div class="i-time"><%=item.updateTime%></div>
+            </div>
+            <div class="i-num">
+                <span class="i-count"><%=item.commentsall%></span>
+                <span class="i-icon"></span>
+            </div>
+        </div>
+    </section>
+
+    <%}else if(item.type=='phvideo'){%>
+    <section class="itemPics videoPic">
+        <div class="i-title">
+            <a href="<%=item.link.weburl%>"><%=item.title%></a>
+        </div>
+        <div class="bigPic">
+            <img src="<%=item.thumbnail%>"/>
+            <span class="play-icon"></span>
+            <span class="play-bg"></span>
+        </div>
+        <div class="i-des">
+            <div class="i-info">
+                <div class="i-source"><%=item.source%>></div>
+                <div class="i-time"></div>
+            </div>
+
+            <div class="i-num">
+                <span class="i-count"><%=item.source%></span>
+                <span class="i-icon"></span>
+            </div>
+
+        </div>
+    </section>
+
+    <%}else if(item.thumbnail){%>
+    <section class="item">
+        <div class="i-pic">
+            <a href="<%=item.link.weburl%>">
+                <img src="<%=item.thumbnail%>" alt="">
+            </a>
+        </div>
+        <div class="i-thumb">
+            <div class="i-title"><a href="<%=item.link.weburl%>"><%=item.title%></a></div>
+            <div class="i-des">
+                <div class="i-time"><%=item.updateTime%></div>
+                <div class="i-num">
+                    <span class="i-count"><%=item.commentsall%></span>
+                    <span class="i-icon"></span>
+                    <%if(item.style.attribute){%>
+                    <span class="i-label"><%=item.style.attribute%></span>
+                    <%}%>
+                </div>
+            </div>
+        </div>
+    </section>
+    <%}else{%>
+    <section class="itemPics itemTxt">
+        <div class="i-title"><a href="#">这三年，习近平治国理政思想
+            及成就</a></div>
+        <div class="i-des">
+            <div class="i-info">
+                <div class="i-source">参考信息网</div>
+                <div class="i-time">1分钟前</div>
+            </div>
+            <div class="i-num">
+                <span class="i-count">6480</span>
+                <span class="i-icon"></span>
+            </div>
+        </div>
+    </section>
+    <%}%>
+
+    <%})%>
+
+
+
+
+
+
+
+</script>
+<script>
+    ~function (desW) {
+        var winW=document.documentElement.clientWidth,ratio=winW/desW;
+        document.documentElement.style.fontSize=ratio*100+'px';
+    }(750)
+
+
+    //第二步ejs绑定数据
+    //获取数据
+    $.ajax({
+        url:'http://api.iclient.ifeng.com/ClientNews?id=SYLB10,SYDT10&gv=5.4.0&os=ios&uid=8jWzrXDWQeep2Nw4AZYzmHxkbneHy4Fj&callback=jQuery191037427085312083364_1483258003039&_=1483258003040',
+        type:'get',
+        dataType:'jsonp',
+        jsonp:'callback',
+        success:bindHTML
+    });
+
+    //绑定数据
+    function bindHTML(data) {
+        for(var i=0;i<data.length;i++){
+            //json数据给了list focus 两种type类型
+            if(data[i].type=='focus'){
+               var focusList=data[i].item;
+            }else{
+                for(var j=0;j<data[i].item.length;j++){
+                   var template='2017年3月5日,18点24分40秒';
+                    if(data[i].item[j].updateTime!=undefined) {
+                        var arr = data[i].item[j].updateTime.split(/[\/ :]/);
+                    }
+                    var reg=/{(\d)}/g;
+                    var res=template.replace(reg,function () {
+                        return arr[arguments[1]];
+                    });
+                    console.log(res);
+
+               }
+
+                var itemList=data[i].item;
+            }
+        }
+        _focusData=focusList;//焦点图的数据
+        _itemData=itemList;//中间内容模块的数据
+
+        //第四步
+        var focusHtml=$('#focusTemplate').html();//获取模板的内容
+        var result=ejs.render(focusHtml,{focusTemData:_focusData});
+        $('.swiper-wrapper').html(result);
+
+        //swiper有了结构后，再实现swiper初始化的设置
+        var mySwiper=new Swiper('.swiper-container',{
+            loop:true,//无缝滚动
+            pagination:'.swiper-pagination',//分页器
+            paginationType:'fraction'//规定分页器的类型
+        })
+
+        //第四步
+        var itemHtml=$('#itemTemplate').html();//获取模板的内容
+        var rest=ejs.render(itemHtml,{itemTemData:_itemData});
+        $('.main').html(rest);
+    }
+</script>
+</body>
+</html>
